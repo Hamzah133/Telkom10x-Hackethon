@@ -3,9 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const enrolledCourses = [
-  "Advanced React Patterns",
-  "UI/UX Design Fundamentals",
-  "Next.js for Production",
+  "Basic Finances",
+  "Workplace English",
+  "Essential Maths",
+  "World Geography",
+  "General Science",
 ];
 
 export default function ProfilePage() {

@@ -5,13 +5,13 @@ import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'LearnForward',
-  description: 'Advance your skills with LearnForward.',
+  title: 'Bantu Learn',
+  description: 'Upskill yourself with Bantu Learn.',
   manifest: '/manifest.json',
-  applicationName: 'LearnForward',
+  applicationName: 'Bantu Learn',
   appleWebApp: {
     capable: true,
-    title: 'LearnForward',
+    title: 'Bantu Learn',
     statusBarStyle: 'default',
   },
   formatDetection: {

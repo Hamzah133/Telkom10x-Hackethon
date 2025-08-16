@@ -2,12 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
 const demoCourses = [
-  { name: "Introduction to JavaScript", progress: 100 },
-  { name: "Advanced React Patterns", progress: 65 },
-  { name: "UI/UX Design Fundamentals", progress: 30 },
-  { name: "State Management with Zustand", progress: 0 },
-  { name: "Next.js for Production", progress: 85 },
-  { name: "DevOps for Frontend Engineers", progress: 10 },
+  { name: "Basic Finances", progress: 75 },
+  { name: "Workplace English", progress: 50 },
+  { name: "Essential Maths", progress: 90 },
+  { name: "World Geography", progress: 20 },
+  { name: "General Science", progress: 35 },
+  { name: "Introduction to Computers", progress: 0 },
 ];
 
 export default function CoursesPage() {
@@ -18,8 +18,8 @@ export default function CoursesPage() {
         <p className="text-muted-foreground mt-2">Continue your learning journey.</p>
       </header>
       <div className="max-w-4xl mx-auto space-y-4">
-        {demoCourses.map((course) => (
-          <Card key={course.name}>
+        {demoCourses.map((course, index) => (
+          <Card key={course.name} className="animate-fade-in-up" style={{ animationDelay: `${index * 150}ms` }}>
             <CardHeader>
               <CardTitle className="text-xl font-headline">{course.name}</CardTitle>
             </CardHeader>
