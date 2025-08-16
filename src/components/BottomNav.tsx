@@ -6,7 +6,7 @@ import { Home, LayoutGrid, Info, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/", label: "Home", icon: Home },
+  { href: "/dashboard", label: "Home", icon: Home },
   { href: "/courses", label: "Courses", icon: LayoutGrid },
   { href: "/about", label: "About", icon: Info },
   { href: "/profile", label: "Profile", icon: User },

@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import BottomNav from '@/components/BottomNav';
-import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
 import { Toaster } from '@/components/ui/toaster';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 export const metadata: Metadata = {
   title: 'Bantu Learn',
@@ -37,12 +36,10 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased bg-background text-foreground">
-        <ServiceWorkerRegistrar />
-        <div className="relative flex flex-col min-h-dvh">
-          <main className="flex-1 pb-24 px-4">{children}</main>
-          <BottomNav />
-        </div>
-        <Toaster />
+        <AuthProvider>
+            <Toaster />
+            {children}
+        </AuthProvider>
       </body>
     </html>
   );
