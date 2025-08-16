@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AuthContext } from '@/contexts/AuthContext';
@@ -43,8 +43,9 @@ export default function ProfilePage() {
           <CardHeader>
             <div className="flex items-center space-x-4">
               <Avatar className="h-20 w-20">
-                <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint="person portrait" />
-                <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
+                <AvatarFallback className="text-3xl">
+                  {user.name?.charAt(0).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
               <div>
                 <CardTitle className="text-2xl font-headline">{user.name}</CardTitle>

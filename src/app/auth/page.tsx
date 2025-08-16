@@ -55,7 +55,7 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">{isLogin ? 'Login' : 'Sign Up'}</CardTitle>
@@ -84,9 +84,9 @@ export default function AuthPage() {
               {isLogin ? 'Login' : 'Create account'}
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-6 text-center text-md">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}
-            <button onClick={() => { setIsLogin(!isLogin); setError('')} } className="underline ml-1">
+            <button onClick={() => { setIsLogin(!isLogin); setError('')} } className="underline ml-2 font-semibold text-primary">
               {isLogin ? 'Sign up' : 'Login'}
             </button>
           </div>
