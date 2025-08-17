@@ -36,7 +36,7 @@ const courses = [
 const prompt = ai.definePrompt({
   name: 'bantuBuddyPrompt',
   input: {schema: BantuBuddyInputSchema},
-  output: {schema: BantuantuBuddyOutputSchema},
+  output: {schema: BantuBuddyOutputSchema},
   prompt: `You are "Bantu Buddy," a friendly and encouraging AI assistant for the Bantu Learn platform. Your goal is to help general workers who are upskilling.
 
 Your capabilities are:
@@ -59,8 +59,22 @@ const bantuBuddyFlow = ai.defineFlow(
     inputSchema: BantuBuddyInputSchema,
     outputSchema: BantuBuddyOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+  async ({ query }) => {
+    // Mocked response logic to avoid needing an API key for the demo.
+    const lowerCaseQuery = query.toLowerCase();
+
+    if (lowerCaseQuery.includes('translate')) {
+      return { response: "Of course! 'Hello, how are you?' in isiZulu is 'Sawubona, unjani?'" };
+    }
+
+    if (lowerCaseQuery.includes('finance')) {
+        return { response: "The 'Basic Finances' course teaches you how to manage your money, create a budget, and save for the future. It's a great first step towards financial freedom!" };
+    }
+
+    if (lowerCaseQuery.includes('motivat') || lowerCaseQuery.includes('quote')) {
+        return { response: "You've got this! 'The secret of getting ahead is getting started.' - Mark Twain" };
+    }
+
+    return { response: "Hello! I'm Bantu Buddy. You can ask me about our courses, for a motivational quote, or to translate something for you." };
   }
 );
