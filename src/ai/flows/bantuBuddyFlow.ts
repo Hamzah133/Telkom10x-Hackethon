@@ -59,38 +59,8 @@ const bantuBuddyFlow = ai.defineFlow(
     inputSchema: BantuBuddyInputSchema,
     outputSchema: BantuBuddyOutputSchema,
   },
-  async ({ query }) => {
-    // Mocked response logic to avoid needing an API key for the demo.
-    const lowerCaseQuery = query.toLowerCase();
-
-    if (lowerCaseQuery.includes('translate')) {
-      if (lowerCaseQuery.includes('zulu')) {
-        return { response: "Of course! 'Good morning' in isiZulu is 'Sawubona'." };
-      }
-      if (lowerCaseQuery.includes('xhosa')) {
-          return { response: "You got it! 'How are you?' in isiXhosa is 'Unjani?'" };
-      }
-      return { response: "I can help with that! For example, 'Thank you' in Swahili is 'Asante'." };
-    }
-
-    const course = courses.find(c => lowerCaseQuery.includes(c.name.toLowerCase().split(' ')[0]));
-    if (course) {
-        return { response: course.description };
-    }
-
-    if (lowerCaseQuery.includes('motivat') || lowerCaseQuery.includes('quote')) {
-        const quotes = [
-            "You've got this! 'The secret of getting ahead is getting started.' - Mark Twain",
-            "Keep going! 'Believe you can and you're halfway there.' - Theodore Roosevelt",
-            "Every step counts! 'A journey of a thousand miles begins with a single step.' - Lao Tzu"
-        ];
-        return { response: quotes[Math.floor(Math.random() * quotes.length)] };
-    }
-    
-    if (lowerCaseQuery.includes('hi') || lowerCaseQuery.includes('hello')) {
-      return { response: "Hello there! How can I help you today? You can ask me about courses, translations, or for a motivational quote." };
-    }
-
-    return { response: "I'm not sure how to answer that, but I'm here to help! You can ask me about our courses like 'Basic Finances', ask for a translation, or request a motivational quote." };
+  async input => {
+    const {output} = await prompt(input);
+    return output!;
   }
 );
