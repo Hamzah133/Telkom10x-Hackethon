@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -98,6 +99,7 @@ export default function BasicFinancesPage() {
     } catch (err) {
         console.error(err);
         setError("An unexpected error occurred during translation. Please check the server logs.");
+        setLessonContent(originalContent);
     } finally {
         setIsLoadingTranslation(false);
     }
