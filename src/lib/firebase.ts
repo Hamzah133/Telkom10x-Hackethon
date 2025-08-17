@@ -3,35 +3,15 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// ====================================================================================
-// TODO: PASTE YOUR FIREBASE CONFIGURATION OBJECT HERE
-// ====================================================================================
-// You can get this from the Firebase console for your "App-Mobi" project.
-// Go to Project Settings > General > Your apps > SDK setup and configuration.
-// Select "Config" and copy the entire firebaseConfig object.
-//
-// It should look like this:
-//
-// const firebaseConfig = {
-//   apiKey: "AIza...",
-//   authDomain: "app-mobi.firebaseapp.com",
-//   projectId: "app-mobi",
-//   storageBucket: "app-mobi.appspot.com",
-//   messagingSenderId: "1234567890",
-//   appId: "1:1234567890:web:abcde..."
-// };
-//
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAWzyRl5iSWIcu8K2uN5Avzwoz2h9IeE-I",
+  authDomain: "skillsync-706d4.firebaseapp.com",
+  projectId: "skillsync-706d4",
+  storageBucket: "skillsync-706d4.appspot.com",
+  messagingSenderId: "822785045283",
+  appId: "1:822785045283:web:809b1d1e5779d5aab45296"
 };
-// ====================================================================================
-// END OF FIREBASE CONFIGURATION
-// ====================================================================================
 
 
 // Initialize Firebase
