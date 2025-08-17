@@ -28,8 +28,8 @@ const courses = [
     { name: "Basic Finances", description: "Learn how to manage your money, create a budget, and save for the future. It's a great first step towards financial freedom!" },
     { name: "Workplace English", description: "Improve your English communication skills for the workplace, including writing emails and speaking confidently." },
     { name: "Basic Child Care", description: "Learn the fundamentals of child care, from safety and nutrition to early childhood development." },
-    { name: "World Geography", description: "Explore the world from your screen! Learn about different countries, capitals, and cultures." },
-    { name: "General Science", description: "Understand the basics of biology, chemistry, and physics in an easy-to-digest format." },
+    { name: "Electricity 101", description: "Learn the basics of electrical circuits, safety, and common household wiring." },
+    { name: "Plumbing 101", description: "An introduction to basic plumbing principles, including fixing leaks and installing fixtures." },
     { name: "Introduction to Computers", description: "Get started with computers, from turning one on to using essential software like web browsers and word processors." }
 ];
 

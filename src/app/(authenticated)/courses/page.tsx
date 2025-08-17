@@ -1,14 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Book, Coins, Globe, Languages, Laptop, Baby } from "lucide-react";
+import { Book, Coins, Globe, Languages, Laptop, Baby, Wrench, Plug } from "lucide-react";
 import Link from "next/link";
 
 const demoCourses = [
   { name: "Basic Finances", progress: 75, icon: Coins, href: "/courses/basic-finances" },
   { name: "Workplace English", progress: 50, icon: Languages, href: "/courses" },
   { name: "Basic Child Care", progress: 0, icon: Baby, href: "/courses" },
-  { name: "World Geography", progress: 20, icon: Globe, href: "/courses" },
-  { name: "General Science", progress: 35, icon: Book, href: "/courses" },
+  { name: "Electricity 101", progress: 20, icon: Plug, href: "/courses" },
+  { name: "Plumbing 101", progress: 35, icon: Wrench, href: "/courses" },
   { name: "Introduction to Computers", progress: 0, icon: Laptop, href: "/courses" },
 ];
 

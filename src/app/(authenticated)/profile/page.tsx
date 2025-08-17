@@ -20,8 +20,8 @@ const enrolledCourses = [
   "Basic Finances",
   "Workplace English",
   "Basic Child Care",
-  "World Geography",
-  "General Science",
+  "Electricity 101",
+  "Plumbing 101",
 ];
 
 const profileFormSchema = z.object({
