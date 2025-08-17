@@ -1,11 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Logo from "@/components/Logo";
 
 export default function AboutPage() {
   return (
     <div className="py-6 space-y-8">
-      <header className="text-center">
+      <header className="relative text-center">
         <h1 className="text-4xl font-bold font-headline text-primary">About Bantu Learn</h1>
         <p className="text-muted-foreground mt-2">Our mission is to empower general workers by making learning accessible and engaging.</p>
+        <div className="absolute top-0 right-0">
+          <Logo size={40} />
+        </div>
       </header>
       <div className="max-w-3xl mx-auto">
         <Card>

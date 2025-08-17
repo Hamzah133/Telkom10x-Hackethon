@@ -1,0 +1,49 @@
+import { cn } from "@/lib/utils";
+
+interface LogoProps extends React.SVGProps<SVGSVGElement> {
+  size?: number;
+  className?: string;
+}
+
+export default function Logo({ size = 40, className, ...props }: LogoProps) {
+  const isSmall = size <= 40;
+  const yPosition = isSmall ? "55%" : "50%";
+  const fontSize = isSmall ? "24" : "18";
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("font-headline", className)}
+      {...props}
+    >
+      <circle cx="50" cy="50" r="48" fill="hsl(var(--primary))" />
+      <text
+        x="50%"
+        y={yPosition}
+        textAnchor="middle"
+        dy={isSmall ? "0" : ".3em"}
+        fill="hsl(var(--primary-foreground))"
+        fontSize={fontSize}
+        fontFamily="Space Grotesk, sans-serif"
+        fontWeight="bold"
+      >
+        {isSmall ? 'BL' : 'Bantu'}
+      </text>
+       {!isSmall && <text
+        x="50%"
+        y="65%"
+        textAnchor="middle"
+        dy=".3em"
+        fill="hsl(var(--primary-foreground))"
+        fontSize={fontSize}
+        fontFamily="Space Grotesk, sans-serif"
+        fontWeight="bold"
+      >
+        Learn
+      </text>}
+    </svg>
+  );
+}

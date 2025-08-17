@@ -9,6 +9,7 @@ import { Volume2, Languages } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { bantuBuddy } from "@/ai/flows/bantuBuddyFlow";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import Logo from "@/components/Logo";
 
 const originalContent = {
   intro: `Welcome to Basic Finances! Understanding money is the first step towards building a secure future. This course will teach you the essential skills of budgeting, saving, and managing debt. Think of it as a toolkit for your financial well-being. By the end, you'll be able to make informed decisions that help you reach your personal and professional goals.`,
@@ -158,6 +159,9 @@ export default function BasicFinancesPage() {
           &lt;
         </Button>
         <h1 className="text-4xl font-bold font-headline text-primary text-center">Basic Finances: The Essentials</h1>
+        <div className="absolute top-0 right-0">
+          <Logo size={40} />
+        </div>
       </header>
       <div className="max-w-3xl mx-auto space-y-6">
         <Card>
