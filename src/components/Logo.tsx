@@ -6,8 +6,7 @@ interface LogoProps extends React.SVGProps<SVGSVGElement> {
 }
 
 export default function Logo({ size = 40, className, ...props }: LogoProps) {
-  const isSmall = size <= 40;
-  const fontSize = isSmall ? "24" : "18";
+  const fontSize = size <= 40 ? "18" : "18";
 
   return (
     <svg
@@ -19,10 +18,10 @@ export default function Logo({ size = 40, className, ...props }: LogoProps) {
       {...props}
     >
       <circle cx="50" cy="50" r="48" fill="hsl(var(--primary))" />
-      {isSmall ? (
+      <>
         <text
           x="50%"
-          y="50%"
+          y="42%"
           textAnchor="middle"
           dy=".3em"
           fill="hsl(var(--primary-foreground))"
@@ -30,36 +29,21 @@ export default function Logo({ size = 40, className, ...props }: LogoProps) {
           fontFamily="Space Grotesk, sans-serif"
           fontWeight="bold"
         >
-          BL
+          Bantu
         </text>
-      ) : (
-        <>
-          <text
-            x="50%"
-            y="42%"
-            textAnchor="middle"
-            dy=".3em"
-            fill="hsl(var(--primary-foreground))"
-            fontSize={fontSize}
-            fontFamily="Space Grotesk, sans-serif"
-            fontWeight="bold"
-          >
-            Bantu
-          </text>
-          <text
-            x="50%"
-            y="62%"
-            textAnchor="middle"
-            dy=".3em"
-            fill="hsl(var(--primary-foreground))"
-            fontSize={fontSize}
-            fontFamily="Space Grotesk, sans-serif"
-            fontWeight="bold"
-          >
-            Learn
-          </text>
-        </>
-      )}
+        <text
+          x="50%"
+          y="62%"
+          textAnchor="middle"
+          dy=".3em"
+          fill="hsl(var(--primary-foreground))"
+          fontSize={fontSize}
+          fontFamily="Space Grotesk, sans-serif"
+          fontWeight="bold"
+        >
+          Learn
+        </text>
+      </>
     </svg>
   );
 }
