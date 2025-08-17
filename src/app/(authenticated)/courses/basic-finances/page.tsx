@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { textToSpeech } from "@/ai/flows/ttsFlow";
-import { Volume2, Languages } from "lucide-react";
+import { Volume2, Languages, ArrowLeft } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { bantuBuddy } from "@/ai/flows/bantuBuddyFlow";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -41,6 +42,7 @@ export default function BasicFinancesPage() {
   const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+  const router = useRouter();
 
   const handleReadAloud = async () => {
     setIsLoadingAudio(true);
@@ -146,8 +148,17 @@ export default function BasicFinancesPage() {
 
   return (
     <div className="py-6 space-y-8">
-      <header className="text-center">
-        <h1 className="text-4xl font-bold font-headline text-primary">Basic Finances: The Essentials</h1>
+      <header className="relative flex items-center justify-center">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+          className="absolute left-0"
+        >
+          <ArrowLeft className="h-6 w-6" />
+          <span className="sr-only">Back</span>
+        </Button>
+        <h1 className="text-4xl font-bold font-headline text-primary text-center">Basic Finances: The Essentials</h1>
       </header>
       <div className="max-w-3xl mx-auto space-y-6">
         <Card>
