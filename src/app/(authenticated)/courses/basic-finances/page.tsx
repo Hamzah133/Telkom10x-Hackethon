@@ -53,8 +53,7 @@ export default function BasicFinancesPage() {
     setError(null);
     setAudioSrc(null);
     try {
-        const fullText = `${lessonContent.intro} ${lessonContent.sections.map(s => `${s.title}. ${s.content}`).join(' ')} ${lessonContent.summary}`;
-        const result = await textToSpeech({ text: fullText });
+        const result = await textToSpeech({ text: lessonContent.intro });
         if (result.audioDataUri) {
             setAudioSrc(result.audioDataUri);
         } else {
