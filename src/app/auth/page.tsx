@@ -8,6 +8,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-1.5c-1.38 0-1.5.62-1.5 1.5V12h3l-.5 3h-2.5v6.8c4.56-.93 8-4.96 8-9.8z"/>
+    </svg>
+  );
+}
+
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -23,7 +31,7 @@ export default function AuthPage() {
     return <div>Auth context is not available.</div>
   }
 
-  const { login, signup } = authContext;
+  const { login, signup, loginWithGoogle } = authContext;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +61,11 @@ export default function AuthPage() {
       setError('An unexpected error occurred.');
     }
   };
+  
+  const handleGoogleSignIn = () => {
+    loginWithGoogle();
+    router.push('/dashboard');
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -60,10 +73,24 @@ export default function AuthPage() {
         <CardHeader>
           <CardTitle className="text-2xl">{isLogin ? 'Login' : 'Sign Up'}</CardTitle>
           <CardDescription>
-            {isLogin ? 'Enter your email below to login to your account' : 'Enter your information to create an account'}
+            {isLogin ? 'Enter your credentials to access your account' : 'Enter your information to create an account'}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="grid gap-4">
+           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
+             <GoogleIcon className="mr-2 h-4 w-4" />
+             Continue with Google
+           </Button>
+           <div className="relative">
+             <div className="absolute inset-0 flex items-center">
+               <span className="w-full border-t" />
+             </div>
+             <div className="relative flex justify-center text-xs uppercase">
+               <span className="bg-background px-2 text-muted-foreground">
+                 Or continue with
+               </span>
+             </div>
+           </div>
           <form onSubmit={handleSubmit} className="grid gap-4">
             {!isLogin && (
               <div className="grid gap-2">
@@ -84,9 +111,9 @@ export default function AuthPage() {
               {isLogin ? 'Login' : 'Create account'}
             </Button>
           </form>
-          <div className="mt-6 text-center text-md">
+          <div className="mt-4 text-center text-sm">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}
-            <button onClick={() => { setIsLogin(!isLogin); setError('')} } className="underline ml-2 font-semibold text-primary">
+            <button onClick={() => { setIsLogin(!isLogin); setError('')} } className="underline ml-1 font-semibold text-primary">
               {isLogin ? 'Sign up' : 'Login'}
             </button>
           </div>

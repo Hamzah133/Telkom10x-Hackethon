@@ -14,6 +14,7 @@ interface AuthContextType {
   login: (user: User) => void;
   logout: () => void;
   signup: (user: Omit<User, 'id'>) => void;
+  loginWithGoogle: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -51,9 +52,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.setItem('bantu-user', JSON.stringify(newUser));
     setUser(newUser);
   };
+  
+  const loginWithGoogle = () => {
+    // This is a mock google login for demo purposes.
+    const googleUser = {
+      id: 'google-12345',
+      email: 'user@google.com',
+      name: 'Google User',
+    };
+    localStorage.setItem('bantu-user', JSON.stringify(googleUser));
+    setUser(googleUser);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, signup }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, signup, loginWithGoogle }}>
       {children}
     </AuthContext.Provider>
   );
