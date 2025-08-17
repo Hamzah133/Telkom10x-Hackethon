@@ -19,7 +19,7 @@ import { Edit } from 'lucide-react';
 const enrolledCourses = [
   "Basic Finances",
   "Workplace English",
-  "Essential Maths",
+  "Basic Child Care",
   "World Geography",
   "General Science",
 ];
