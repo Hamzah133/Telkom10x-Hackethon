@@ -7,6 +7,7 @@
 
 import {ai} from '@/ai/genkit';
 import { TranslateContentInputSchema, TranslatedContentSchema, type TranslateContentInput, type TranslatedContent } from '@/ai/schemas/translationSchema';
+import {z} from 'zod';
 
 export async function translateContent(input: TranslateContentInput): Promise<TranslatedContent | null> {
   return translationFlow(input);
