@@ -4,34 +4,37 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { textToSpeech } from "@/ai/flows/ttsFlow";
-import { Volume2, Languages, Pencil, Check } from "lucide-react";
+import { Volume2, Languages } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { bantuBuddy } from "@/ai/flows/bantuBuddyFlow";
-import { Textarea } from "@/components/ui/textarea";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
-const originalLessonContent = `Financial goals are important because they can help fund your lifestyle, helping you meet both personal and professional objectives. It's helpful to divide them into short, medium and long-term objectives. In the short term, it's helpful to reduce debt, create a savings account and create a budget that accommodates your lifestyle. For example, a short-term goal could be saving R500 in the next three months. In the medium and long term, it's useful to focus on financial stability and retirement planning. A medium-term goal could be saving for a down payment on a car, while a long-term goal would be saving for your retirement.`;
-
-const originalLessonBenefits = [
-    "It can lead to financial freedom.",
-    "It increases your chances of having a comfortable retirement.",
-    "It can help you reduce or eliminate debt.",
-    "It can help you save money for emergency situations.",
-];
+const originalContent = {
+  intro: `Welcome to Basic Finances! Understanding money is the first step towards building a secure future. This course will teach you the essential skills of budgeting, saving, and managing debt. Think of it as a toolkit for your financial well-being. By the end, you'll be able to make informed decisions that help you reach your personal and professional goals.`,
+  sections: [
+    { 
+      title: "1. The Power of Budgeting",
+      content: "A budget is a plan for your money. It's not about restriction; it's about control. By tracking your income (money in) and expenses (money out), you can see exactly where your money goes. The most popular method is the 50/30/20 rule: 50% of your income for needs (housing, food), 30% for wants (entertainment, hobbies), and 20% for savings and debt repayment. Creating a budget helps you prioritize spending and avoid surprises."
+    },
+    {
+      title: "2. Saving: Your Path to Freedom",
+      content: "Saving money is crucial for both emergencies and future goals. Start by building an emergency fund—a separate savings account with enough money to cover 3-6 months of essential living expenses. This is your safety net. Once that's in place, you can start saving for other things, like a down payment on a car, education, or retirement. Even small, regular contributions add up over time thanks to compound interest!"
+    },
+    {
+      title: "3. Understanding and Managing Debt",
+      content: "Debt is when you owe money to someone else. Not all debt is bad (like a home loan), but high-interest debt (like from credit cards or personal loans) can be a major obstacle. The key is to manage it wisely. Always make your minimum payments on time. To pay it off faster, consider the 'debt snowball' method (paying off the smallest debts first for motivation) or the 'debt avalanche' method (paying off the highest-interest debts first to save money)."
+    },
+  ],
+  summary: "By mastering these three pillars—budgeting, saving, and managing debt—you gain control over your financial life. You'll be better prepared for unexpected events, empowered to make your dreams a reality, and on the path to long-term financial stability."
+};
 
 const southAfricanLanguages = [
     "Zulu", "Xhosa", "Afrikaans", "Sepedi", "Tswana", "Sesotho", "Tsonga", "Swati", "Venda", "Ndebele"
 ];
 
-const initialGoals = [
-    { text: "Save R1000 for an emergency fund", isEditing: false },
-    { text: "Create a monthly budget and stick to it", isEditing: false },
-    { text: "Pay off my clothing store account", isEditing: false },
-];
 
 export default function BasicFinancesPage() {
-  const [lessonContent, setLessonContent] = useState(originalLessonContent);
-  const [lessonBenefits, setLessonBenefits] = useState(originalLessonBenefits);
-  const [personalGoals, setPersonalGoals] = useState(initialGoals);
+  const [lessonContent, setLessonContent] = useState(originalContent);
   
   const [audioSrc, setAudioSrc] = useState<string | null>(null);
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
@@ -39,24 +42,12 @@ export default function BasicFinancesPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState<string>("");
 
-  const handleGoalChange = (index: number, newText: string) => {
-    const updatedGoals = [...personalGoals];
-    updatedGoals[index].text = newText;
-    setPersonalGoals(updatedGoals);
-  };
-
-  const toggleGoalEditing = (index: number) => {
-    const updatedGoals = [...personalGoals];
-    updatedGoals[index].isEditing = !updatedGoals[index].isEditing;
-    setPersonalGoals(updatedGoals);
-  };
-
   const handleReadAloud = async () => {
     setIsLoadingAudio(true);
     setError(null);
     setAudioSrc(null);
     try {
-        const fullText = `${lessonContent} These are some of the benefits of creating financial goals: ${lessonBenefits.join('. ')}`;
+        const fullText = `${lessonContent.intro} ${lessonContent.sections.map(s => `${s.title}. ${s.content}`).join(' ')} ${lessonContent.summary}`;
         const result = await textToSpeech({ text: fullText });
         if (result.audioDataUri) {
             setAudioSrc(result.audioDataUri);
@@ -79,8 +70,7 @@ export default function BasicFinancesPage() {
     
     // Reset to original if user wants to see it again
     if(selectedLanguage === 'English') {
-        setLessonContent(originalLessonContent);
-        setLessonBenefits(originalLessonBenefits);
+        setLessonContent(originalContent);
         return;
     }
     
@@ -89,36 +79,61 @@ export default function BasicFinancesPage() {
 
     try {
         const contentToTranslate = `
-        Lesson:
-        ${originalLessonContent}
+        Introduction:
+        ${originalContent.intro}
         
-        Benefits:
-        - ${originalLessonBenefits.join('\n- ')}
+        Section 1 Title:
+        ${originalContent.sections[0].title}
+        Section 1 Content:
+        ${originalContent.sections[0].content}
+
+        Section 2 Title:
+        ${originalContent.sections[1].title}
+        Section 2 Content:
+        ${originalContent.sections[1].content}
+
+        Section 3 Title:
+        ${originalContent.sections[2].title}
+        Section 3 Content:
+        ${originalContent.sections[2].content}
+
+        Summary:
+        ${originalContent.summary}
         `;
 
-        const prompt = `Translate the following text to ${selectedLanguage}. Respond with ONLY the translation in a structured format. Start the lesson translation with "Lesson:" and the benefits with "Benefits:". Separate each benefit with a new line starting with '-'.`;
+        const prompt = `Translate the following lesson content to ${selectedLanguage}. Respond with ONLY the translation in a structured format, keeping the same keys (Introduction, Section 1 Title, etc.).`;
 
         const result = await bantuBuddy({ query: `${prompt}\n\n${contentToTranslate}` });
         
         const responseText = result.response;
 
-        if (!responseText) {
+        if (!responseText || responseText.trim() === '') {
             setError("Translation failed. The AI returned an empty response.");
             return;
         }
         
-        const lessonMatch = responseText.match(/Lesson:([\s\S]*?)Benefits:/);
-        const benefitsMatch = responseText.match(/Benefits:([\s\S]*)/);
+        const introMatch = responseText.match(/Introduction:([\s\S]*?)Section 1 Title:/);
+        const section1TitleMatch = responseText.match(/Section 1 Title:([\s\S]*?)Section 1 Content:/);
+        const section1ContentMatch = responseText.match(/Section 1 Content:([\s\S]*?)Section 2 Title:/);
+        const section2TitleMatch = responseText.match(/Section 2 Title:([\s\S]*?)Section 2 Content:/);
+        const section2ContentMatch = responseText.match(/Section 2 Content:([\s\S]*?)Section 3 Title:/);
+        const section3TitleMatch = responseText.match(/Section 3 Title:([\s\S]*?)Section 3 Content:/);
+        const section3ContentMatch = responseText.match(/Section 3 Content:([\s\S]*?)Summary:/);
+        const summaryMatch = responseText.match(/Summary:([\s\S]*)/);
         
-        if (lessonMatch && benefitsMatch) {
-            const translatedLesson = lessonMatch[1].trim();
-            const translatedBenefits = benefitsMatch[1].trim().split('\n').map(b => b.trim().replace(/^- /, ''));
-            setLessonContent(translatedLesson);
-            setLessonBenefits(translatedBenefits);
+        if (introMatch && section1TitleMatch && section1ContentMatch && section2TitleMatch && section2ContentMatch && section3TitleMatch && section3ContentMatch && summaryMatch) {
+            setLessonContent({
+                intro: introMatch[1].trim(),
+                sections: [
+                    { title: section1TitleMatch[1].trim(), content: section1ContentMatch[1].trim() },
+                    { title: section2TitleMatch[1].trim(), content: section2ContentMatch[1].trim() },
+                    { title: section3TitleMatch[1].trim(), content: section3ContentMatch[1].trim() }
+                ],
+                summary: summaryMatch[1].trim()
+            });
         } else {
-            // Fallback for unstructured response
-            setLessonContent(responseText);
-            setLessonBenefits([]);
+             setError("Could not parse the translated content. Please try again.");
+             setLessonContent(originalContent);
         }
 
     } catch (err) {
@@ -132,7 +147,7 @@ export default function BasicFinancesPage() {
   return (
     <div className="py-6 space-y-8">
       <header className="text-center">
-        <h1 className="text-4xl font-bold font-headline text-primary">Basic Finances: Setting Financial Goals</h1>
+        <h1 className="text-4xl font-bold font-headline text-primary">Basic Finances: The Essentials</h1>
       </header>
       <div className="max-w-3xl mx-auto space-y-6">
         <Card>
@@ -163,15 +178,22 @@ export default function BasicFinancesPage() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4 text-foreground/90 leading-relaxed">
-            <p>
-                {lessonContent}
+            <p className="text-lg">
+                {lessonContent.intro}
             </p>
-            <h3 className="font-bold font-headline text-lg">Key Benefits of Setting Financial Goals:</h3>
-            <ul className="list-disc list-inside space-y-2">
-                {lessonBenefits.map((benefit, index) => (
-                    <li key={index}>{benefit}</li>
-                ))}
-            </ul>
+            <Accordion type="single" collapsible className="w-full">
+              {lessonContent.sections.map((section, index) => (
+                <AccordionItem value={`item-${index}`} key={index}>
+                  <AccordionTrigger className="font-headline text-xl text-primary">{section.title}</AccordionTrigger>
+                  <AccordionContent className="text-base">
+                    {section.content}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+             <h3 className="font-bold font-headline text-lg pt-4">In Summary:</h3>
+             <p>{lessonContent.summary}</p>
+
             {error && <p className="text-red-500">{error}</p>}
             {audioSrc && (
               <div className="mt-4">
@@ -181,32 +203,6 @@ export default function BasicFinancesPage() {
               </div>
             )}
           </CardContent>
-        </Card>
-
-        <Card>
-            <CardHeader>
-                <CardTitle className="font-headline">Your Personal Financial Goals</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className="space-y-4">
-                    {personalGoals.map((goal, index) => (
-                        <div key={index} className="flex items-center gap-2">
-                            {goal.isEditing ? (
-                                <Textarea
-                                    value={goal.text}
-                                    onChange={(e) => handleGoalChange(index, e.target.value)}
-                                    className="flex-grow bg-background"
-                                />
-                            ) : (
-                                <p className="flex-grow p-2 rounded-md bg-secondary/30">{goal.text}</p>
-                            )}
-                            <Button size="icon" variant="ghost" onClick={() => toggleGoalEditing(index)}>
-                                {goal.isEditing ? <Check className="h-5 w-5 text-green-500" /> : <Pencil className="h-5 w-5" />}
-                            </Button>
-                        </div>
-                    ))}
-                </div>
-            </CardContent>
         </Card>
       </div>
     </div>
