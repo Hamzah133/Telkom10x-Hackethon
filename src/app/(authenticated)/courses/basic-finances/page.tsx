@@ -4,11 +4,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { textToSpeech } from "@/ai/flows/ttsFlow";
-import { Volume2, Languages } from "lucide-react";
+import { Volume2, Languages, Pencil, Check } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { bantuBuddy } from "@/ai/flows/bantuBuddyFlow";
+import { Textarea } from "@/components/ui/textarea";
 
-const originalLessonContent = `Financial goals are important because they can help fund your lifestyle, helping you meet both personal and professional objectives. It's helpful to divide them into short, medium and long-term objectives. In the short term, it's helpful to reduce debt, create a savings account and create a budget that accommodates your lifestyle. In the medium and long term, it's useful to focus on financial stability and retirement planning.`;
+const originalLessonContent = `Financial goals are important because they can help fund your lifestyle, helping you meet both personal and professional objectives. It's helpful to divide them into short, medium and long-term objectives. In the short term, it's helpful to reduce debt, create a savings account and create a budget that accommodates your lifestyle. For example, a short-term goal could be saving R500 in the next three months. In the medium and long term, it's useful to focus on financial stability and retirement planning. A medium-term goal could be saving for a down payment on a car, while a long-term goal would be saving for your retirement.`;
 
 const originalLessonBenefits = [
     "It can lead to financial freedom.",
@@ -21,15 +22,34 @@ const southAfricanLanguages = [
     "Zulu", "Xhosa", "Afrikaans", "Sepedi", "Tswana", "Sesotho", "Tsonga", "Swati", "Venda", "Ndebele"
 ];
 
+const initialGoals = [
+    { text: "Save R1000 for an emergency fund", isEditing: false },
+    { text: "Create a monthly budget and stick to it", isEditing: false },
+    { text: "Pay off my clothing store account", isEditing: false },
+];
+
 export default function BasicFinancesPage() {
   const [lessonContent, setLessonContent] = useState(originalLessonContent);
   const [lessonBenefits, setLessonBenefits] = useState(originalLessonBenefits);
+  const [personalGoals, setPersonalGoals] = useState(initialGoals);
   
   const [audioSrc, setAudioSrc] = useState<string | null>(null);
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+
+  const handleGoalChange = (index: number, newText: string) => {
+    const updatedGoals = [...personalGoals];
+    updatedGoals[index].text = newText;
+    setPersonalGoals(updatedGoals);
+  };
+
+  const toggleGoalEditing = (index: number) => {
+    const updatedGoals = [...personalGoals];
+    updatedGoals[index].isEditing = !updatedGoals[index].isEditing;
+    setPersonalGoals(updatedGoals);
+  };
 
   const handleReadAloud = async () => {
     setIsLoadingAudio(true);
@@ -112,7 +132,7 @@ export default function BasicFinancesPage() {
   return (
     <div className="py-6 space-y-8">
       <header className="text-center">
-        <h1 className="text-4xl font-bold font-headline text-primary">Basic Finances: Why are financial goals important?</h1>
+        <h1 className="text-4xl font-bold font-headline text-primary">Basic Finances: Setting Financial Goals</h1>
       </header>
       <div className="max-w-3xl mx-auto space-y-6">
         <Card>
@@ -146,7 +166,7 @@ export default function BasicFinancesPage() {
             <p>
                 {lessonContent}
             </p>
-            <h3 className="font-bold font-headline text-lg">These are some of the benefits of creating financial goals:</h3>
+            <h3 className="font-bold font-headline text-lg">Key Benefits of Setting Financial Goals:</h3>
             <ul className="list-disc list-inside space-y-2">
                 {lessonBenefits.map((benefit, index) => (
                     <li key={index}>{benefit}</li>
@@ -161,6 +181,32 @@ export default function BasicFinancesPage() {
               </div>
             )}
           </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle className="font-headline">Your Personal Financial Goals</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-4">
+                    {personalGoals.map((goal, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                            {goal.isEditing ? (
+                                <Textarea
+                                    value={goal.text}
+                                    onChange={(e) => handleGoalChange(index, e.target.value)}
+                                    className="flex-grow bg-background"
+                                />
+                            ) : (
+                                <p className="flex-grow p-2 rounded-md bg-secondary/30">{goal.text}</p>
+                            )}
+                            <Button size="icon" variant="ghost" onClick={() => toggleGoalEditing(index)}>
+                                {goal.isEditing ? <Check className="h-5 w-5 text-green-500" /> : <Pencil className="h-5 w-5" />}
+                            </Button>
+                        </div>
+                    ))}
+                </div>
+            </CardContent>
         </Card>
       </div>
     </div>

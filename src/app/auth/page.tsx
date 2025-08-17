@@ -80,7 +80,7 @@ export default function AuthPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background relative overflow-hidden">
-      <div className="absolute inset-0 bg-repeat bg-center" style={{ backgroundImage: "url('/background-pattern.svg')" }}></div>
+      <div className="absolute inset-0 bg-repeat bg-center" style={{ backgroundImage: "url('/background-pattern.svg')", opacity: 0.1 }}></div>
       <Card className="w-full max-w-sm z-10">
         <CardHeader>
           <CardTitle className="text-2xl">{isLogin ? 'Login' : 'Sign Up'}</CardTitle>
