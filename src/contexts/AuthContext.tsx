@@ -9,9 +9,13 @@ import {
   signInWithEmailAndPassword, 
   signOut,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  updatePassword as firebaseUpdatePassword,
+  updateProfile as firebaseUpdateProfile,
+  EmailAuthProvider,
+  reauthenticateWithCredential
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from '@/lib/firebase';
 
 interface User {
@@ -27,6 +31,8 @@ interface AuthContextType {
   logout: () => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
+  updateUserName: (name: string) => Promise<void>;
+  updateUserPassword: (password: string) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -69,7 +75,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signup = async (name, email, password) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const firebaseUser = userCredential.user;
-    // Save user to firestore
+    await firebaseUpdateProfile(firebaseUser, { displayName: name });
     await setDoc(doc(db, "users", firebaseUser.uid), {
         name: name,
         email: email,
@@ -91,9 +97,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         });
     }
   };
+  
+  const updateUserName = async (name: string) => {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) throw new Error("User not found");
+
+    await updateDoc(doc(db, "users", firebaseUser.uid), { name });
+    
+    setUser((prevUser) => {
+        if (!prevUser) return null;
+        return { ...prevUser, name: name };
+    });
+  }
+
+  const updateUserPassword = async (password: string) => {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) throw new Error("User not found");
+
+    await firebaseUpdatePassword(firebaseUser, password);
+  }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, signup, loginWithGoogle }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, signup, loginWithGoogle, updateUserName, updateUserPassword }}>
       {children}
     </AuthContext.Provider>
   );
