@@ -4,24 +4,35 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { textToSpeech } from "@/ai/flows/ttsFlow";
-import { Volume2 } from "lucide-react";
+import { Volume2, Languages } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { bantuBuddy } from "@/ai/flows/bantuBuddyFlow";
 
-const lessonContent = `Financial goals are important because they can help fund your lifestyle, helping you meet both personal and professional objectives. It's helpful to divide them into short, medium and long-term objectives. In the short term, it's helpful to reduce debt, create a savings account and create a budget that accommodates your lifestyle. In the medium and long term, it's useful to focus on financial stability and retirement planning.`;
+const originalLessonContent = `Financial goals are important because they can help fund your lifestyle, helping you meet both personal and professional objectives. It's helpful to divide them into short, medium and long-term objectives. In the short term, it's helpful to reduce debt, create a savings account and create a budget that accommodates your lifestyle. In the medium and long term, it's useful to focus on financial stability and retirement planning.`;
 
-const lessonBenefits = [
+const originalLessonBenefits = [
     "It can lead to financial freedom.",
     "It increases your chances of having a comfortable retirement.",
     "It can help you reduce or eliminate debt.",
     "It can help you save money for emergency situations.",
 ];
 
+const southAfricanLanguages = [
+    "Zulu", "Xhosa", "Afrikaans", "Sepedi", "Tswana", "Sesotho", "Tsonga", "Swati", "Venda", "Ndebele"
+];
+
 export default function BasicFinancesPage() {
+  const [lessonContent, setLessonContent] = useState(originalLessonContent);
+  const [lessonBenefits, setLessonBenefits] = useState(originalLessonBenefits);
+  
   const [audioSrc, setAudioSrc] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
+  const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
 
   const handleReadAloud = async () => {
-    setIsLoading(true);
+    setIsLoadingAudio(true);
     setError(null);
     setAudioSrc(null);
     try {
@@ -36,9 +47,62 @@ export default function BasicFinancesPage() {
       console.error(err);
       setError("An error occurred while generating audio.");
     } finally {
-      setIsLoading(false);
+      setIsLoadingAudio(false);
     }
   };
+  
+  const handleTranslate = async () => {
+    if (!selectedLanguage) {
+        setError("Please select a language to translate to.");
+        return;
+    }
+    
+    // Reset to original if user wants to see it again
+    if(selectedLanguage === 'English') {
+        setLessonContent(originalLessonContent);
+        setLessonBenefits(originalLessonBenefits);
+        return;
+    }
+    
+    setIsLoadingTranslation(true);
+    setError(null);
+
+    try {
+        const contentToTranslate = `
+        Lesson:
+        ${originalLessonContent}
+        
+        Benefits:
+        - ${originalLessonBenefits.join('\n- ')}
+        `;
+
+        const prompt = `Translate the following text to ${selectedLanguage}. Respond with ONLY the translation in a structured format. Start the lesson translation with "Lesson:" and the benefits with "Benefits:". Separate each benefit with a new line starting with '-'.`;
+
+        const result = await bantuBuddy({ query: `${prompt}\n\n${contentToTranslate}` });
+        
+        const responseText = result.response;
+        
+        const lessonMatch = responseText.match(/Lesson:([\s\S]*?)Benefits:/);
+        const benefitsMatch = responseText.match(/Benefits:([\s\S]*)/);
+        
+        if (lessonMatch && benefitsMatch) {
+            const translatedLesson = lessonMatch[1].trim();
+            const translatedBenefits = benefitsMatch[1].trim().split('\n').map(b => b.trim().replace(/^- /, ''));
+            setLessonContent(translatedLesson);
+            setLessonBenefits(translatedBenefits);
+        } else {
+            // Fallback for unstructured response
+            setLessonContent(responseText);
+            setLessonBenefits([]);
+        }
+
+    } catch (err) {
+        console.error(err);
+        setError("An error occurred during translation.");
+    } finally {
+        setIsLoadingTranslation(false);
+    }
+  }
 
   return (
     <div className="py-6 space-y-8">
@@ -47,12 +111,31 @@ export default function BasicFinancesPage() {
       </header>
       <div className="max-w-3xl mx-auto space-y-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
+          <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <CardTitle className="font-headline">Lesson Details</CardTitle>
-            <Button onClick={handleReadAloud} disabled={isLoading}>
-                <Volume2 className="mr-2 h-4 w-4" />
-                {isLoading ? "Generating Audio..." : "Read Aloud"}
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+                 <Button onClick={handleReadAloud} disabled={isLoadingAudio} className="w-full sm:w-auto">
+                     <Volume2 className="mr-2 h-4 w-4" />
+                     {isLoadingAudio ? "Generating..." : "Read Aloud"}
+                 </Button>
+                <div className="flex gap-2 w-full sm:w-auto">
+                    <Select onValueChange={setSelectedLanguage} value={selectedLanguage}>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="English">English (Original)</SelectItem>
+                            {southAfricanLanguages.map(lang => (
+                                <SelectItem key={lang} value={lang}>{lang}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                     <Button onClick={handleTranslate} disabled={isLoadingTranslation} className="w-full sm:w-auto">
+                        <Languages className="mr-2 h-4 w-4" />
+                        {isLoadingTranslation ? "Translating..." : "Translate"}
+                    </Button>
+                </div>
+            </div>
           </CardHeader>
           <CardContent className="space-y-4 text-foreground/90 leading-relaxed">
             <p>
