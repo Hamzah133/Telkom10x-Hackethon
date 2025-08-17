@@ -4,29 +4,29 @@
 
 @layer base {
   :root {
-    --background: 220 10% 25%; /* Dark Slate Blue-Grey */
-    --foreground: 0 0% 98%; /* White */
-    --card: 220 12% 30%; /* Slightly lighter card background */
-    --card-foreground: 0 0% 98%; /* White */
-    --popover: 220 12% 30%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 217 91% 60%; /* Bright Blue */
+    --background: 220 10% 95%; /* Light Gray */
+    --foreground: 224 10% 10%; /* Dark Slate */
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 224 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 10% 10%;
+    --primary: 206 100% 40%; /* Telkom Blue */
     --primary-foreground: 0 0% 98%; /* White */
-    --secondary: 220 10% 40%; /* Lighter Blue-Gray for secondary elements */
-    --secondary-foreground: 0 0% 98%;
-    --muted: 220 10% 40%;
-    --muted-foreground: 220 5% 75%; /* Lighter muted text */
-    --accent: 220 10% 40%;
-    --accent-foreground: 217 91% 60%; /* Bright Blue */
+    --secondary: 220 10% 90%; /* Lighter Gray */
+    --secondary-foreground: 224 10% 10%;
+    --muted: 220 10% 90%;
+    --muted-foreground: 220 5% 45%; /* Muted Slate Text */
+    --accent: 220 10% 90%;
+    --accent-foreground: 206 100% 40%; /* Telkom Blue */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 10% 45%; /* Border with blue tint */
-    --input: 220 10% 45%;
-    --ring: 217 91% 60%; /* Bright Blue Ring */
-    --chart-1: 217 91% 60%;
-    --chart-2: 0 0% 98%;
-    --chart-3: 220 5% 75%;
-    --chart-4: 220 10% 40%;
+    --border: 220 10% 85%; /* Border with gray tint */
+    --input: 220 10% 85%;
+    --ring: 206 100% 40%; /* Telkom Blue Ring */
+    --chart-1: 206 100% 40%;
+    --chart-2: 224 10% 10%;
+    --chart-3: 220 5% 45%;
+    --chart-4: 220 10% 90%;
     --chart-5: 200 50% 70%;
     --radius: 0.5rem;
     --sidebar-background: 240 5.9% 10%;
