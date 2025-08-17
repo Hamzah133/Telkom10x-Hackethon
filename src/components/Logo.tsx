@@ -7,7 +7,6 @@ interface LogoProps extends React.SVGProps<SVGSVGElement> {
 
 export default function Logo({ size = 40, className, ...props }: LogoProps) {
   const isSmall = size <= 40;
-  const yPosition = isSmall ? "55%" : "50%";
   const fontSize = isSmall ? "24" : "18";
 
   return (
@@ -20,30 +19,47 @@ export default function Logo({ size = 40, className, ...props }: LogoProps) {
       {...props}
     >
       <circle cx="50" cy="50" r="48" fill="hsl(var(--primary))" />
-      <text
-        x="50%"
-        y={yPosition}
-        textAnchor="middle"
-        dy={isSmall ? "0" : ".3em"}
-        fill="hsl(var(--primary-foreground))"
-        fontSize={fontSize}
-        fontFamily="Space Grotesk, sans-serif"
-        fontWeight="bold"
-      >
-        {isSmall ? 'BL' : 'Bantu'}
-      </text>
-       {!isSmall && <text
-        x="50%"
-        y="65%"
-        textAnchor="middle"
-        dy=".3em"
-        fill="hsl(var(--primary-foreground))"
-        fontSize={fontSize}
-        fontFamily="Space Grotesk, sans-serif"
-        fontWeight="bold"
-      >
-        Learn
-      </text>}
+      {isSmall ? (
+        <text
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          dy=".3em"
+          fill="hsl(var(--primary-foreground))"
+          fontSize={fontSize}
+          fontFamily="Space Grotesk, sans-serif"
+          fontWeight="bold"
+        >
+          BL
+        </text>
+      ) : (
+        <>
+          <text
+            x="50%"
+            y="42%"
+            textAnchor="middle"
+            dy=".3em"
+            fill="hsl(var(--primary-foreground))"
+            fontSize={fontSize}
+            fontFamily="Space Grotesk, sans-serif"
+            fontWeight="bold"
+          >
+            Bantu
+          </text>
+          <text
+            x="50%"
+            y="62%"
+            textAnchor="middle"
+            dy=".3em"
+            fill="hsl(var(--primary-foreground))"
+            fontSize={fontSize}
+            fontFamily="Space Grotesk, sans-serif"
+            fontWeight="bold"
+          >
+            Learn
+          </text>
+        </>
+      )}
     </svg>
   );
 }

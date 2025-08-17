@@ -1,3 +1,5 @@
+"use client";
+
 import { CheckCircle, Clock, PlayCircle } from "lucide-react";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import StatsCard from "@/components/StatsCard";
@@ -13,7 +15,7 @@ export default function DashboardPage() {
         </div>
         <p className="text-muted-foreground mt-2">Welcome back! Here's your learning snapshot.</p>
         <div className="absolute top-0 right-0">
-            <Logo size={80} />
+            <Logo size={40} />
         </div>
       </header>
 
