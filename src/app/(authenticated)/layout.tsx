@@ -32,8 +32,9 @@ export default function AuthenticatedLayout({
   return (
     <>
       <ServiceWorkerRegistrar />
-      <div className="relative flex flex-col min-h-dvh">
-        <main className="flex-1 pb-24 px-4">{children}</main>
+      <div className="relative flex flex-col min-h-dvh bg-background">
+        <div className="absolute inset-0 bg-repeat bg-center" style={{ backgroundImage: "url('/background-pattern.svg')", opacity: 0.1 }}></div>
+        <main className="flex-1 pb-24 px-4 z-10">{children}</main>
         <BottomNav />
       </div>
     </>

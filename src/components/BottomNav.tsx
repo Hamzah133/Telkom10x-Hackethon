@@ -16,7 +16,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border shadow-t-lg z-50">
+    <header className="fixed bottom-0 left-0 right-0 h-16 bg-primary border-t border-border shadow-t-lg z-50">
       <nav className="flex justify-around items-center h-full max-w-lg mx-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -27,8 +27,8 @@ export default function BottomNav() {
               className={cn(
                 "flex flex-col items-center justify-center w-full h-full text-sm font-medium transition-colors duration-200 ease-in-out",
                 isActive
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-primary"
+                  ? "text-primary-foreground font-bold"
+                  : "text-primary-foreground/70 hover:text-primary-foreground"
               )}
               aria-current={isActive ? "page" : undefined}
             >

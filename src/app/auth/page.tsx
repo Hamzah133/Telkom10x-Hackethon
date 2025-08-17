@@ -8,62 +8,87 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.75 8.36,4.73 12.19,4.73C14.03,4.73 15.6,5.33 16.8,6.39L19.06,4.13C17.02,2.34 14.68,1.5 12.19,1.5C6.54,1.5 2,6.48 2,12C2,17.52 6.54,22.5 12.19,22.5C17.43,22.5 21.5,18.84 21.5,12.33C21.5,11.76 21.45,11.43 21.35,11.1Z"/>
+    </svg>
+  );
+}
+
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const authContext = useContext(AuthContext);
   const router = useRouter();
 
   if (!authContext) {
-    // This should not happen if the provider is set up correctly.
     return <div>Auth context is not available.</div>
   }
 
-  const { login, signup } = authContext;
+  const { login, signup, loginWithGoogle } = authContext;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
       if (isLogin) {
-        // Mock login: In a real app, you'd fetch the user from a DB.
-        // For demo, we assume any saved user can log in if the email matches.
-        const storedUser = JSON.parse(localStorage.getItem('bantu-user') || '{}');
-        if (storedUser.email === email) {
-          login(storedUser);
-          router.push('/dashboard');
-        } else {
-          setError('Invalid email or password.');
-        }
+        await login(email, password);
       } else {
-        // Mock signup
         if(!name || !email || !password) {
             setError('Please fill all fields');
+            setIsLoading(false);
             return;
         }
-        signup({ email, name });
-        router.push('/dashboard');
+        await signup(name, email, password);
       }
-    } catch (err) {
-      setError('An unexpected error occurred.');
+      router.push('/dashboard');
+    } catch (err: any) {
+        if(err.code) {
+            setError(err.code.replace('auth/', '').replace(/-/g, ' '));
+        } else {
+            setError('An unexpected error occurred.');
+        }
+    } finally {
+        setIsLoading(false);
     }
   };
+  
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setIsLoading(true);
+    try {
+        await loginWithGoogle();
+        router.push('/dashboard');
+    } catch (err: any) {
+        if(err.code) {
+            setError(err.code.replace('auth/', '').replace(/-/g, ' '));
+        } else {
+            setError('An unexpected error occurred.');
+        }
+    } finally {
+        setIsLoading(false);
+    }
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-      <Card className="w-full max-w-sm">
+    <div className="flex items-center justify-center min-h-screen bg-background relative overflow-hidden">
+      <div className="absolute inset-0 bg-repeat bg-center" style={{ backgroundImage: "url('/background-pattern.svg')", opacity: 0.1 }}></div>
+      <Card className="w-full max-w-sm z-10">
         <CardHeader>
           <CardTitle className="text-2xl">{isLogin ? 'Login' : 'Sign Up'}</CardTitle>
           <CardDescription>
-            {isLogin ? 'Enter your email below to login to your account' : 'Enter your information to create an account'}
+            {isLogin ? 'Enter your credentials to access your account' : 'Enter your information to create an account'}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="grid gap-4">
           <form onSubmit={handleSubmit} className="grid gap-4">
             {!isLogin && (
               <div className="grid gap-2">
@@ -79,17 +104,31 @@ export default function AuthPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full">
-              {isLogin ? 'Login' : 'Create account'}
+            {error && <p className="text-red-500 text-sm capitalize">{error}</p>}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? 'Loading...' : (isLogin ? 'Login' : 'Create account')}
             </Button>
           </form>
-          <div className="mt-6 text-center text-md">
+           <div className="relative">
+             <div className="absolute inset-0 flex items-center">
+               <span className="w-full border-t" />
+             </div>
+             <div className="relative flex justify-center text-xs uppercase">
+               <span className="bg-background px-2 text-muted-foreground">
+                 Or
+               </span>
+             </div>
+           </div>
+          <div className="mt-4 text-center text-sm">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}
-            <button onClick={() => { setIsLogin(!isLogin); setError('')} } className="underline ml-2 font-semibold text-primary">
+            <button onClick={() => { setIsLogin(!isLogin); setError('')} } className="underline ml-1 font-semibold text-primary text-base" disabled={isLoading}>
               {isLogin ? 'Sign up' : 'Login'}
             </button>
           </div>
+           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
+             <GoogleIcon className="mr-2 h-4 w-4" />
+             Continue with Google
+           </Button>
         </CardContent>
       </Card>
     </div>
