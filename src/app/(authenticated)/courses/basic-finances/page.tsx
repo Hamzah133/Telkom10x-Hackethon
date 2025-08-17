@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { textToSpeech } from "@/ai/flows/ttsFlow";
-import { Volume2, Languages, ArrowLeft } from "lucide-react";
+import { Volume2, Languages } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { bantuBuddy } from "@/ai/flows/bantuBuddyFlow";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -151,12 +151,11 @@ export default function BasicFinancesPage() {
       <header className="relative flex items-center justify-center">
         <Button
           variant="ghost"
-          size="icon"
           onClick={() => router.back()}
-          className="absolute left-0"
+          className="absolute left-0 text-4xl font-bold text-primary px-2"
+          aria-label="Back"
         >
-          <ArrowLeft className="h-6 w-6" />
-          <span className="sr-only">Back</span>
+          &lt;
         </Button>
         <h1 className="text-4xl font-bold font-headline text-primary text-center">Basic Finances: The Essentials</h1>
       </header>
