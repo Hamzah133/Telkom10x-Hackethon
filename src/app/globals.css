@@ -4,30 +4,30 @@
 
 @layer base {
   :root {
-    --background: 30 90% 55%; /* Deep Bright Orange */
-    --foreground: 270 60% 25%; /* Darker Purple */
-    --card: 30 90% 50%; /* Slightly Darker Orange for Cards */
-    --card-foreground: 270 60% 25%; /* Darker Purple */
-    --popover: 30 90% 50%; /* Slightly Darker Orange */
-    --popover-foreground: 270 60% 25%; /* Darker Purple */
-    --primary: 270 50% 35%; /* Dark Purple */
-    --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 270 40% 85%; /* Lighter Purple */
-    --secondary-foreground: 270 50% 20%; /* Even Darker Purple */
-    --muted: 30 80% 65%; /* Muted Orange */
-    --muted-foreground: 270 50% 30%; /* Muted Dark Purple */
-    --accent: 320 80% 60%; /* Vibrant Pink/Magenta Accent */
-    --accent-foreground: 0 0% 100%; /* White */
+    --background: 222 47% 11%; /* Navy Blue */
+    --foreground: 0 0% 98%; /* White */
+    --card: 222 47% 15%; /* Darker Navy Blue */
+    --card-foreground: 0 0% 98%; /* White */
+    --popover: 222 47% 11%; /* Navy Blue */
+    --popover-foreground: 0 0% 98%; /* White */
+    --primary: 210 40% 96%; /* Light Blue/Gray */
+    --primary-foreground: 222 47% 11%; /* Navy Blue */
+    --secondary: 217 33% 17%; /* Slightly Lighter Navy */
+    --secondary-foreground: 0 0% 98%; /* White */
+    --muted: 217 33% 25%; /* Muted Navy */
+    --muted-foreground: 215 28% 65%; /* Muted Light Gray */
+    --accent: 210 40% 98%; /* White/Light Gray Accent */
+    --accent-foreground: 222 47% 11%; /* Navy Blue */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 270 50% 40%; /* Dark Purple Border */
-    --input: 270 50% 90%; /* Very Light Purple Input */
-    --ring: 270 50% 45%; /* Dark Purple Ring */
-    --chart-1: 270 70% 50%;
-    --chart-2: 300 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 217 33% 25%; /* Muted Navy Border */
+    --input: 217 33% 22%; /* Muted Navy Input */
+    --ring: 210 40% 96%; /* Light Blue/Gray Ring */
+    --chart-1: 210 40% 96%;
+    --chart-2: 220 30% 80%;
+    --chart-3: 200 50% 70%;
+    --chart-4: 230 40% 85%;
+    --chart-5: 215 35% 75%;
     --radius: 0.5rem;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
