@@ -1,6 +1,7 @@
 import { CheckCircle, Clock, PlayCircle } from "lucide-react";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import StatsCard from "@/components/StatsCard";
+import BantuBuddy from "@/components/BantuBuddy";
 
 export default function DashboardPage() {
   return (
@@ -10,17 +11,19 @@ export default function DashboardPage() {
         <p className="text-muted-foreground mt-2">Welcome back! Here's your learning snapshot.</p>
       </header>
 
-      <div className="flex flex-col items-center space-y-4 pt-8 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-        <h2 className="text-2xl font-bold font-headline">Last Accessed Course</h2>
-        <CircularProgressBar progress={90} courseName="Essential Maths" />
-      </div>
+      <div className="w-full max-w-4xl p-4 space-y-8">
+        <div className="flex flex-col items-center space-y-4 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <h2 className="text-2xl font-bold font-headline">Last Accessed Course</h2>
+          <CircularProgressBar progress={90} courseName="Essential Maths" />
+        </div>
 
-      <div className="w-full max-w-4xl p-4">
         <div className="grid gap-4 md:grid-cols-3 sm:grid-cols-1 w-full">
           <StatsCard title="Courses Completed" value="2" icon={CheckCircle} animationDelay="400ms" />
           <StatsCard title="Courses In Progress" value="3" icon={PlayCircle} animationDelay="550ms" />
           <StatsCard title="Modules Not Started" value="1" icon={Clock} animationDelay="700ms" />
         </div>
+
+        <BantuBuddy />
       </div>
     </div>
   );
