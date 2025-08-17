@@ -15,11 +15,11 @@ export default function DashboardPage() {
         <CircularProgressBar progress={90} courseName="Essential Maths" />
       </div>
 
-      <div className="w-full max-w-4xl p-4 bg-primary/5 rounded-lg">
+      <div className="w-full max-w-4xl p-4">
         <div className="grid gap-4 md:grid-cols-3 sm:grid-cols-1 w-full">
-          <StatsCard title="Courses Completed" value="2" icon={CheckCircle} />
-          <StatsCard title="Courses In Progress" value="3" icon={PlayCircle} />
-          <StatsCard title="Modules Not Started" value="1" icon={Clock} />
+          <StatsCard title="Courses Completed" value="2" icon={CheckCircle} animationDelay="400ms" />
+          <StatsCard title="Courses In Progress" value="3" icon={PlayCircle} animationDelay="550ms" />
+          <StatsCard title="Modules Not Started" value="1" icon={Clock} animationDelay="700ms" />
         </div>
       </div>
     </div>

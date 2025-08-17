@@ -68,8 +68,9 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-      <Card className="w-full max-w-sm">
+    <div className="flex items-center justify-center min-h-screen bg-background relative overflow-hidden">
+      <div className="absolute inset-0 bg-repeat bg-center" style={{ backgroundImage: "url('/background-pattern.svg')" }}></div>
+      <Card className="w-full max-w-sm z-10">
         <CardHeader>
           <CardTitle className="text-2xl">{isLogin ? 'Login' : 'Sign Up'}</CardTitle>
           <CardDescription>
@@ -107,16 +108,16 @@ export default function AuthPage() {
                </span>
              </div>
            </div>
-           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
-             <GoogleIcon className="mr-2 h-4 w-4" />
-             Continue with Google
-           </Button>
           <div className="mt-4 text-center text-sm">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}
             <button onClick={() => { setIsLogin(!isLogin); setError('')} } className="underline ml-1 font-semibold text-primary text-base">
               {isLogin ? 'Sign up' : 'Login'}
             </button>
           </div>
+           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
+             <GoogleIcon className="mr-2 h-4 w-4" />
+             Continue with Google
+           </Button>
         </CardContent>
       </Card>
     </div>
