@@ -8,7 +8,7 @@
 import {ai} from '@/ai/genkit';
 import { TranslateContentInputSchema, TranslatedContentSchema, type TranslateContentInput, type TranslatedContent } from '@/ai/schemas/translationSchema';
 
-export async function translateContent(input: TranslateContentInput): Promise<TranslatedContent> {
+export async function translateContent(input: TranslateContentInput): Promise<TranslatedContent | null> {
   return translationFlow(input);
 }
 
@@ -34,10 +34,10 @@ const translationFlow = ai.defineFlow(
   {
     name: 'translationFlow',
     inputSchema: TranslateContentInputSchema,
-    outputSchema: TranslatedContentSchema,
+    outputSchema: z.nullable(TranslatedContentSchema),
   },
   async (input) => {
     const {output} = await prompt(input);
-    return output!;
+    return output ?? null;
   }
 );

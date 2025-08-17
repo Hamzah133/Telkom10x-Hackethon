@@ -11,6 +11,7 @@ import { translateContent } from "@/ai/flows/translationFlow";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Logo from "@/components/Logo";
 import type { TranslatedContent } from "@/ai/schemas/translationSchema";
+import { z } from "zod";
 
 const originalContent: TranslatedContent = {
   intro: `Welcome to Basic Finances! Understanding money is the first step towards building a secure future. This course will teach you the essential skills of budgeting, saving, and managing debt. Think of it as a toolkit for your financial well-being. By the end, you'll be able to make informed decisions that help you reach your personal and professional goals.`,
@@ -90,13 +91,13 @@ export default function BasicFinancesPage() {
         if (translatedContent) {
             setLessonContent(translatedContent);
         } else {
-             setError("Could not parse the translated content. Please try again.");
+             setError("Could not parse the translated content. The AI may have returned an invalid format. Please try again.");
              setLessonContent(originalContent);
         }
 
     } catch (err) {
         console.error(err);
-        setError("An error occurred during translation.");
+        setError("An unexpected error occurred during translation. Please check the server logs.");
     } finally {
         setIsLoadingTranslation(false);
     }
