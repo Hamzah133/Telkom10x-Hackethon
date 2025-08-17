@@ -81,6 +81,11 @@ export default function BasicFinancesPage() {
         const result = await bantuBuddy({ query: `${prompt}\n\n${contentToTranslate}` });
         
         const responseText = result.response;
+
+        if (!responseText) {
+            setError("Translation failed. The AI returned an empty response.");
+            return;
+        }
         
         const lessonMatch = responseText.match(/Lesson:([\s\S]*?)Benefits:/);
         const benefitsMatch = responseText.match(/Benefits:([\s\S]*)/);
