@@ -3,22 +3,11 @@
  * @fileOverview A friendly AI assistant for the Bantu Learn app.
  *
  * - bantuBuddy - A function that handles the AI assistant's responses.
- * - BantuBuddyInput - The input type for the bantuBuddy function.
- * - BantuBuddyOutput - The return type for the bantuBuddy function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'zod';
+import { BantuBuddyInputSchema, BantuBuddyOutputSchema, type BantuBuddyInput, type BantuBuddyOutput } from '@/ai/schemas/bantuBuddySchema';
 
-const BantuBuddyInputSchema = z.object({
-  query: z.string().describe("The user's question or request."),
-});
-export type BantuBuddyInput = z.infer<typeof BantuBuddyInputSchema>;
-
-const BantuBuddyOutputSchema = z.object({
-  response: z.string().describe("The AI assistant's response."),
-});
-export type BantuBuddyOutput = z.infer<typeof BantuBuddyOutputSchema>;
 
 export async function bantuBuddy(input: BantuBuddyInput): Promise<BantuBuddyOutput> {
   return bantuBuddyFlow(input);

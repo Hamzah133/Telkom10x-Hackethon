@@ -15,6 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Edit } from 'lucide-react';
+import Logo from '@/components/Logo';
 
 const enrolledCourses = [
   "Basic Finances",
@@ -88,9 +89,12 @@ export default function ProfilePage() {
 
   return (
     <div className="py-6 space-y-8">
-      <header className="text-center">
+      <header className="relative text-center">
         <h1 className="text-4xl font-bold font-headline text-primary">User Profile</h1>
         <p className="text-muted-foreground mt-2">Manage your account and preferences.</p>
+        <div className="absolute top-0 right-0">
+          <Logo size={40} />
+        </div>
       </header>
 
       <div className="max-w-3xl mx-auto space-y-6">

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -7,10 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { textToSpeech } from "@/ai/flows/ttsFlow";
 import { Volume2, Languages } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { bantuBuddy } from "@/ai/flows/bantuBuddyFlow";
+import { translateContent } from "@/ai/flows/translationFlow";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import Logo from "@/components/Logo";
+import type { TranslatedContent } from "@/ai/schemas/translationSchema";
+import { z } from "zod";
 
-const originalContent = {
+const originalContent: TranslatedContent = {
   intro: `Welcome to Basic Finances! Understanding money is the first step towards building a secure future. This course will teach you the essential skills of budgeting, saving, and managing debt. Think of it as a toolkit for your financial well-being. By the end, you'll be able to make informed decisions that help you reach your personal and professional goals.`,
   sections: [
     { 
@@ -49,8 +53,7 @@ export default function BasicFinancesPage() {
     setError(null);
     setAudioSrc(null);
     try {
-        const fullText = `${lessonContent.intro} ${lessonContent.sections.map(s => `${s.title}. ${s.content}`).join(' ')} ${lessonContent.summary}`;
-        const result = await textToSpeech({ text: fullText });
+        const result = await textToSpeech({ text: lessonContent.intro });
         if (result.audioDataUri) {
             setAudioSrc(result.audioDataUri);
         } else {
@@ -80,67 +83,22 @@ export default function BasicFinancesPage() {
     setError(null);
 
     try {
-        const contentToTranslate = `
-        Introduction:
-        ${originalContent.intro}
+        const translatedContent = await translateContent({
+            language: selectedLanguage,
+            content: originalContent
+        });
         
-        Section 1 Title:
-        ${originalContent.sections[0].title}
-        Section 1 Content:
-        ${originalContent.sections[0].content}
-
-        Section 2 Title:
-        ${originalContent.sections[1].title}
-        Section 2 Content:
-        ${originalContent.sections[1].content}
-
-        Section 3 Title:
-        ${originalContent.sections[2].title}
-        Section 3 Content:
-        ${originalContent.sections[2].content}
-
-        Summary:
-        ${originalContent.summary}
-        `;
-
-        const prompt = `Translate the following lesson content to ${selectedLanguage}. Respond with ONLY the translation in a structured format, keeping the same keys (Introduction, Section 1 Title, etc.).`;
-
-        const result = await bantuBuddy({ query: `${prompt}\n\n${contentToTranslate}` });
-        
-        const responseText = result.response;
-
-        if (!responseText || responseText.trim() === '') {
-            setError("Translation failed. The AI returned an empty response.");
-            return;
-        }
-        
-        const introMatch = responseText.match(/Introduction:([\s\S]*?)Section 1 Title:/);
-        const section1TitleMatch = responseText.match(/Section 1 Title:([\s\S]*?)Section 1 Content:/);
-        const section1ContentMatch = responseText.match(/Section 1 Content:([\s\S]*?)Section 2 Title:/);
-        const section2TitleMatch = responseText.match(/Section 2 Title:([\s\S]*?)Section 2 Content:/);
-        const section2ContentMatch = responseText.match(/Section 2 Content:([\s\S]*?)Section 3 Title:/);
-        const section3TitleMatch = responseText.match(/Section 3 Title:([\s\S]*?)Section 3 Content:/);
-        const section3ContentMatch = responseText.match(/Section 3 Content:([\s\S]*?)Summary:/);
-        const summaryMatch = responseText.match(/Summary:([\s\S]*)/);
-        
-        if (introMatch && section1TitleMatch && section1ContentMatch && section2TitleMatch && section2ContentMatch && section3TitleMatch && section3ContentMatch && summaryMatch) {
-            setLessonContent({
-                intro: introMatch[1].trim(),
-                sections: [
-                    { title: section1TitleMatch[1].trim(), content: section1ContentMatch[1].trim() },
-                    { title: section2TitleMatch[1].trim(), content: section2ContentMatch[1].trim() },
-                    { title: section3TitleMatch[1].trim(), content: section3ContentMatch[1].trim() }
-                ],
-                summary: summaryMatch[1].trim()
-            });
+        if (translatedContent) {
+            setLessonContent(translatedContent);
         } else {
-             setError("Could not parse the translated content. Please try again.");
+             setError("Could not parse the translated content. The AI may have returned an invalid format. Please try again.");
              setLessonContent(originalContent);
         }
 
     } catch (err) {
         console.error(err);
-        setError("An error occurred during translation.");
+        setError("An unexpected error occurred during translation. Please check the server logs.");
+        setLessonContent(originalContent);
     } finally {
         setIsLoadingTranslation(false);
     }
@@ -158,6 +116,9 @@ export default function BasicFinancesPage() {
           &lt;
         </Button>
         <h1 className="text-4xl font-bold font-headline text-primary text-center">Basic Finances: The Essentials</h1>
+        <div className="absolute top-0 right-0">
+          <Logo size={40} />
+        </div>
       </header>
       <div className="max-w-3xl mx-auto space-y-6">
         <Card>

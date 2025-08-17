@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Book, Coins, Globe, Languages, Laptop, Baby, Wrench, Plug } from "lucide-react";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 const demoCourses = [
   { name: "Basic Finances", progress: 75, icon: Coins, href: "/courses/basic-finances" },
@@ -15,9 +16,12 @@ const demoCourses = [
 export default function CoursesPage() {
   return (
     <div className="py-6 space-y-8">
-      <header className="text-center">
+      <header className="relative text-center">
         <h1 className="text-4xl font-bold font-headline text-primary">All Courses</h1>
         <p className="text-muted-foreground mt-2">Continue your learning journey.</p>
+        <div className="absolute top-0 right-0">
+          <Logo size={40} />
+        </div>
       </header>
       <div className="max-w-4xl mx-auto space-y-4">
         {demoCourses.map((course, index) => (
