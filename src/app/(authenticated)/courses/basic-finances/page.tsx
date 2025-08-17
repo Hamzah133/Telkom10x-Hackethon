@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { textToSpeech } from "@/ai/flows/ttsFlow";
 import { Volume2, Languages } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { bantuBuddy } from "@/ai/flows/bantuBuddyFlow";
+import { translateContent } from "@/ai/flows/translationFlow";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Logo from "@/components/Logo";
 
@@ -81,59 +81,13 @@ export default function BasicFinancesPage() {
     setError(null);
 
     try {
-        const contentToTranslate = `
-        Introduction:
-        ${originalContent.intro}
+        const translatedContent = await translateContent({
+            language: selectedLanguage,
+            content: originalContent
+        });
         
-        Section 1 Title:
-        ${originalContent.sections[0].title}
-        Section 1 Content:
-        ${originalContent.sections[0].content}
-
-        Section 2 Title:
-        ${originalContent.sections[1].title}
-        Section 2 Content:
-        ${originalContent.sections[1].content}
-
-        Section 3 Title:
-        ${originalContent.sections[2].title}
-        Section 3 Content:
-        ${originalContent.sections[2].content}
-
-        Summary:
-        ${originalContent.summary}
-        `;
-
-        const prompt = `Translate the following lesson content to ${selectedLanguage}. Respond with ONLY the translation in a structured format, keeping the same keys (Introduction, Section 1 Title, etc.).`;
-
-        const result = await bantuBuddy({ query: `${prompt}\n\n${contentToTranslate}` });
-        
-        const responseText = result.response;
-
-        if (!responseText || responseText.trim() === '') {
-            setError("Translation failed. The AI returned an empty response.");
-            return;
-        }
-        
-        const introMatch = responseText.match(/Introduction:([\s\S]*?)Section 1 Title:/);
-        const section1TitleMatch = responseText.match(/Section 1 Title:([\s\S]*?)Section 1 Content:/);
-        const section1ContentMatch = responseText.match(/Section 1 Content:([\s\S]*?)Section 2 Title:/);
-        const section2TitleMatch = responseText.match(/Section 2 Title:([\s\S]*?)Section 2 Content:/);
-        const section2ContentMatch = responseText.match(/Section 2 Content:([\s\S]*?)Section 3 Title:/);
-        const section3TitleMatch = responseText.match(/Section 3 Title:([\s\S]*?)Section 3 Content:/);
-        const section3ContentMatch = responseText.match(/Section 3 Content:([\s\S]*?)Summary:/);
-        const summaryMatch = responseText.match(/Summary:([\s\S]*)/);
-        
-        if (introMatch && section1TitleMatch && section1ContentMatch && section2TitleMatch && section2ContentMatch && section3TitleMatch && section3ContentMatch && summaryMatch) {
-            setLessonContent({
-                intro: introMatch[1].trim(),
-                sections: [
-                    { title: section1TitleMatch[1].trim(), content: section1ContentMatch[1].trim() },
-                    { title: section2TitleMatch[1].trim(), content: section2ContentMatch[1].trim() },
-                    { title: section3TitleMatch[1].trim(), content: section3ContentMatch[1].trim() }
-                ],
-                summary: summaryMatch[1].trim()
-            });
+        if (translatedContent) {
+            setLessonContent(translatedContent);
         } else {
              setError("Could not parse the translated content. Please try again.");
              setLessonContent(originalContent);
