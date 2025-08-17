@@ -26,10 +26,14 @@ export default function ProfilePage() {
   
   const { user, logout } = authContext;
 
-  const handleLogout = () => {
-    logout();
-    router.push('/auth');
+  const handleLogout = async () => {
+    if(logout) {
+      await logout();
+      router.push('/auth');
+    }
   }
+
+  const userInitial = user.name ? user.name.charAt(0).toUpperCase() : (user.email ? user.email.charAt(0).toUpperCase() : '');
 
   return (
     <div className="py-6 space-y-8">
@@ -44,11 +48,11 @@ export default function ProfilePage() {
             <div className="flex items-center space-x-4">
               <Avatar className="h-20 w-20">
                 <AvatarFallback className="text-3xl">
-                  {user.name?.charAt(0).toUpperCase()}
+                  {userInitial}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <CardTitle className="text-2xl font-headline">{user.name}</CardTitle>
+                <CardTitle className="text-2xl font-headline">{user.name || 'User'}</CardTitle>
                 <p className="text-muted-foreground">{user.email}</p>
               </div>
             </div>

@@ -22,49 +22,60 @@ export default function AuthPage() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const authContext = useContext(AuthContext);
   const router = useRouter();
 
   if (!authContext) {
-    // This should not happen if the provider is set up correctly.
     return <div>Auth context is not available.</div>
   }
 
   const { login, signup, loginWithGoogle } = authContext;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
       if (isLogin) {
-        // Mock login: In a real app, you'd fetch the user from a DB.
-        // For demo, we assume any saved user can log in if the email matches.
-        const storedUser = JSON.parse(localStorage.getItem('bantu-user') || '{}');
-        if (storedUser.email === email) {
-          login(storedUser);
-          router.push('/dashboard');
-        } else {
-          setError('Invalid email or password.');
-        }
+        await login(email, password);
       } else {
-        // Mock signup
         if(!name || !email || !password) {
             setError('Please fill all fields');
+            setIsLoading(false);
             return;
         }
-        signup({ email, name });
-        router.push('/dashboard');
+        await signup(name, email, password);
       }
-    } catch (err) {
-      setError('An unexpected error occurred.');
+      router.push('/dashboard');
+    } catch (err: any) {
+        if(err.code) {
+            setError(err.code.replace('auth/', '').replace(/-/g, ' '));
+        } else {
+            setError('An unexpected error occurred.');
+        }
+    } finally {
+        setIsLoading(false);
     }
   };
   
-  const handleGoogleSignIn = () => {
-    loginWithGoogle();
-    router.push('/dashboard');
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setIsLoading(true);
+    try {
+        await loginWithGoogle();
+        router.push('/dashboard');
+    } catch (err: any) {
+        if(err.code) {
+            setError(err.code.replace('auth/', '').replace(/-/g, ' '));
+        } else {
+            setError('An unexpected error occurred.');
+        }
+    } finally {
+        setIsLoading(false);
+    }
   }
 
   return (
@@ -93,9 +104,9 @@ export default function AuthPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full">
-              {isLogin ? 'Login' : 'Create account'}
+            {error && <p className="text-red-500 text-sm capitalize">{error}</p>}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? 'Loading...' : (isLogin ? 'Login' : 'Create account')}
             </Button>
           </form>
            <div className="relative">
@@ -110,11 +121,11 @@ export default function AuthPage() {
            </div>
           <div className="mt-4 text-center text-sm">
             {isLogin ? "Don't have an account?" : 'Already have an account?'}
-            <button onClick={() => { setIsLogin(!isLogin); setError('')} } className="underline ml-1 font-semibold text-primary text-base">
+            <button onClick={() => { setIsLogin(!isLogin); setError('')} } className="underline ml-1 font-semibold text-primary text-base" disabled={isLoading}>
               {isLogin ? 'Sign up' : 'Login'}
             </button>
           </div>
-           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
+           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
              <GoogleIcon className="mr-2 h-4 w-4" />
              Continue with Google
            </Button>

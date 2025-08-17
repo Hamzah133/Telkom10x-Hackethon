@@ -1,20 +1,32 @@
 "use client";
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  User as FirebaseUser, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup
+} from 'firebase/auth';
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { auth, db } from '@/lib/firebase';
 
 interface User {
-  id: string;
-  email: string;
-  name?: string;
+  uid: string;
+  email: string | null;
+  name?: string | null;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (user: User) => void;
-  logout: () => void;
-  signup: (user: Omit<User, 'id'>) => void;
-  loginWithGoogle: () => void;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  signup: (name: string, email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,40 +40,56 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate checking for a logged-in user in local storage
-    const storedUser = localStorage.getItem('bantu-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        const userDocRef = doc(db, "users", firebaseUser.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          setUser({ uid: firebaseUser.uid, email: firebaseUser.email, name: userDoc.data()?.name });
+        } else {
+           setUser({ uid: firebaseUser.uid, email: firebaseUser.email, name: firebaseUser.displayName });
+        }
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const login = (userData: User) => {
-    localStorage.setItem('bantu-user', JSON.stringify(userData));
-    setUser(userData);
+  const login = async (email, password) => {
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
-  const logout = () => {
-    localStorage.removeItem('bantu-user');
-    setUser(null);
+  const logout = async () => {
+    await signOut(auth);
   };
   
-  const signup = (userData: Omit<User, 'id'>) => {
-    const newUser = { ...userData, id: Date.now().toString() };
-    // In a real app, you would check if the user exists
-    localStorage.setItem('bantu-user', JSON.stringify(newUser));
-    setUser(newUser);
+  const signup = async (name, email, password) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const firebaseUser = userCredential.user;
+    // Save user to firestore
+    await setDoc(doc(db, "users", firebaseUser.uid), {
+        name: name,
+        email: email,
+    });
   };
   
-  const loginWithGoogle = () => {
-    // This is a mock google login for demo purposes.
-    const googleUser = {
-      id: 'google-12345',
-      email: 'user@google.com',
-      name: 'Google User',
-    };
-    localStorage.setItem('bantu-user', JSON.stringify(googleUser));
-    setUser(googleUser);
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const firebaseUser = result.user;
+    
+    const userDocRef = doc(db, "users", firebaseUser.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+        await setDoc(userDocRef, {
+            name: firebaseUser.displayName,
+            email: firebaseUser.email,
+        });
+    }
   };
 
   return (
