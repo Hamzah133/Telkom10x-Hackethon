@@ -4,28 +4,28 @@
 
 @layer base {
   :root {
-    --background: 210 29% 97%; /* Light Gray */
-    --foreground: 0 0% 10%; /* Dark Charcoal */
+    --background: 210 17% 98%; /* Off White */
+    --foreground: 215 33% 18%; /* Slate */
     --card: 0 0% 100%; /* White */
-    --card-foreground: 0 0% 10%; /* Dark Charcoal */
+    --card-foreground: 215 33% 18%; /* Slate */
     --popover: 0 0% 100%; /* White */
-    --popover-foreground: 0 0% 10%; /* Dark Charcoal */
-    --primary: 222 84% 55%; /* Deep Blue */
+    --popover-foreground: 215 33% 18%; /* Slate */
+    --primary: 158 91% 31%; /* Emerald Green */
     --primary-foreground: 0 0% 98%; /* White */
     --secondary: 210 20% 92%; /* Lighter Gray */
-    --secondary-foreground: 0 0% 10%; /* Dark Charcoal */
+    --secondary-foreground: 215 33% 18%; /* Slate */
     --muted: 210 20% 92%; /* Lighter Gray */
-    --muted-foreground: 0 0% 33%; /* Gray */
+    --muted-foreground: 215 19% 35%; /* Gray */
     --accent: 210 20% 92%; /* Lighter Gray */
-    --accent-foreground: 0 0% 10%; /* Dark Charcoal */
+    --accent-foreground: 158 91% 31%; /* Emerald Green */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 210 15% 88%; /* Light Gray Border */
     --input: 210 15% 88%; /* Light Gray Input */
-    --ring: 222 84% 55%; /* Deep Blue Ring */
-    --chart-1: 222 84% 55%;
+    --ring: 158 91% 31%; /* Emerald Green Ring */
+    --chart-1: 158 91% 31%;
     --chart-2: 215 25% 27%;
-    --chart-3: 0 0% 33%;
+    --chart-3: 215 19% 35%;
     --chart-4: 210 20% 92%;
     --chart-5: 200 50% 70%;
     --radius: 0.5rem;
