@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
-import { bantuBuddy, BantuBuddyInput } from '@/ai/flows/bantuBuddyFlow';
+import { bantuBuddy } from '@/ai/flows/bantuBuddyFlow';
+import type { BantuBuddyInput } from '@/ai/schemas/bantuBuddySchema';
 
 export default function BantuBuddy() {
   const [query, setQuery] = useState('');

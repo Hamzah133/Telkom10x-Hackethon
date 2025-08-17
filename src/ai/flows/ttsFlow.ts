@@ -1,31 +1,15 @@
-"use server";
+'use server';
 /**
  * @fileOverview A text-to-speech AI flow.
  *
  * - textToSpeech - A function that converts text to speech audio.
- * - TextToSpeechInput - The input type for the textToSpeech function.
- * - TextToSpeechOutput - The return type for the textToSpeech function.
  */
 
 import { ai } from "@/ai/genkit";
 import { googleAI } from "@genkit-ai/googleai";
-import { z } from "zod";
 import wav from "wav";
+import { TextToSpeechInputSchema, TextToSpeechOutputSchema, type TextToSpeechInput, type TextToSpeechOutput } from "@/ai/schemas/ttsSchema";
 
-const TextToSpeechInputSchema = z.object({
-  text: z.string().describe("The text to convert to speech."),
-});
-export type TextToSpeechInput = z.infer<typeof TextToSpeechInputSchema>;
-
-const TextToSpeechOutputSchema = z.object({
-  audioDataUri: z
-    .string()
-    .optional()
-    .describe(
-      "The generated audio as a data URI. Format: 'data:audio/wav;base64,<encoded_data>'"
-    ),
-});
-export type TextToSpeechOutput = z.infer<typeof TextToSpeechOutputSchema>;
 
 export async function textToSpeech(
   input: TextToSpeechInput
